@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lab-automation-digital-twin"
+version = "0.1.0"
+description = "A Python framework for modeling laboratory automation workflows, sample traceability, and device coordination"
+readme = "README.md"
+requires-python = ">=3.8"
+
+authors = [
+  {name = "Oluwaseun O. Ajayi"}
+]
+
+license = {text = "MIT"}
+
+keywords = [
+  "laboratory automation",
+  "digital twin",
+  "sample tracking",
+  "workflow simulation",
+  "traceability",
+  "research software"
+]
+
+dependencies = [
+  "pandas>=1.5.0",
+  "numpy>=1.24.0",
+  "matplotlib>=3.6.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin"
+Repository = "https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin"
