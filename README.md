@@ -3,6 +3,13 @@
 **A modular Python framework for modeling material transport, device coordination, workflow execution, and sample traceability in automated laboratory workflows.**
 
 ---
+## DOI and Archival Record
+
+This software is archived on Zenodo to support long-term preservation, reproducibility, and scholarly citation.
+
+**Current Version:** 1.0.1
+
+**DOI:** https://doi.org/10.5281/zenodo.21689198
 
 ## Overview
 
@@ -23,13 +30,6 @@ This project builds on general laboratory automation concepts such as:
 The framework is intended for non-proprietary, educational, and research-oriented laboratory automation modeling.
 
 ---
-## DOI and Archival Record
-
-This software is archived on Zenodo to support long-term preservation, reproducibility, and scholarly citation.
-
-**Current Version:** 1.0.1
-
-**DOI:** https://doi.org/10.5281/zenodo.21689198
 
 ## What This Framework Does
 
