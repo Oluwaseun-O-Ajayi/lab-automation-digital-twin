@@ -23,6 +23,13 @@ This project builds on general laboratory automation concepts such as:
 The framework is intended for non-proprietary, educational, and research-oriented laboratory automation modeling.
 
 ---
+## DOI and Archival Record
+
+This software is archived on Zenodo to support long-term preservation, reproducibility, and scholarly citation.
+
+**Current Version:** 1.0.1
+
+**DOI:** https://doi.org/10.5281/zenodo.21689198
 
 ## What This Framework Does
 
@@ -148,36 +155,64 @@ lab-automation-digital-twin/
 └── figures/
 
 ## Installation
+
+```bash
 git clone https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin.git
 cd lab-automation-digital-twin
 pip install -e .
+```
 
 ## Quick Start
+
+```python
 from src.sample import Sample
 from src.device import Device
 from src.workflow import Workflow
 from src.digital_twin import DigitalTwinEngine
 
-sample = Sample(sample_id="SAMPLE_001", metadata={"type": "cell_culture"})
+sample = Sample(
+    sample_id="SAMPLE_001",
+    metadata={"type": "cell_culture"}
+)
 
 storage = Device("Storage", capacity=10)
-liquid_handler = Device("LiquidHandler", capacity=1, process_time=5)
-plate_reader = Device("PlateReader", capacity=1, process_time=3)
+liquid_handler = Device(
+    "LiquidHandler",
+    capacity=1,
+    process_time=5
+)
+
+plate_reader = Device(
+    "PlateReader",
+    capacity=1,
+    process_time=3
+)
 
 workflow = Workflow(
     name="Example Screening Workflow",
-    steps=["Storage", "LiquidHandler", "PlateReader", "Storage"]
+    steps=[
+        "Storage",
+        "LiquidHandler",
+        "PlateReader",
+        "Storage"
+    ]
 )
 
 engine = DigitalTwinEngine()
+
 engine.add_sample(sample)
 engine.add_device(storage)
 engine.add_device(liquid_handler)
 engine.add_device(plate_reader)
-engine.run_workflow(sample.sample_id, workflow)
+
+engine.run_workflow(
+    sample.sample_id,
+    workflow
+)
 
 engine.print_audit_log()
 engine.print_metrics()
+```
 
 ## Publication Framing
 This repository is designed as a research software framework for modeling laboratory automation workflows.
@@ -188,16 +223,11 @@ Laboratory Automation Digital Twin Framework: Modeling Material Transport, Devic
 
 ## Scientific Contribution
 
-The contribution of this project is the integration of:
+The Laboratory Automation Digital Twin Framework provides a modular and extensible software environment for modeling automated laboratory workflows through digital twin concepts.
 
-material transport modeling
-device-state modeling
-sample traceability
-workflow execution
-audit logging
-workflow metrics
+The framework integrates sample traceability, device-state management, workflow execution, material transport simulation, event logging, and workflow performance metrics into a single reproducible platform. By combining these capabilities, the framework supports educational activities, workflow analysis, automation planning, and research in laboratory digital transformation.
 
-into a single lightweight and extensible laboratory automation digital twin framework.
+Rather than controlling physical automation systems, the framework focuses on providing a transparent computational representation of laboratory operations that can be used to explore workflow behavior, evaluate system design concepts, and investigate traceability and throughput characteristics.
 
 ## Limitations
 
@@ -209,8 +239,32 @@ MIT License
 
 ## Citation
 
-If you use this software, please cite the repository and associated manuscript files.
+If you use this software in research, education, workflow modeling, or laboratory automation studies, please cite:
 
+```text
+Ajayi, O. O. (2026).
+
+Laboratory Automation Digital Twin Framework
+(Version 1.0.1) [Computer software].
+
+Zenodo.
+
+DOI: 10.5281/zenodo.21689198
+```
+
+### BibTeX
+
+```bibtex
+@software{digital_twin_framework_2026,
+  author = {Ajayi, Oluwaseun O.},
+  title = {Laboratory Automation Digital Twin Framework},
+  year = {2026},
+  version = {1.0.1},
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.21689198},
+  url = {https://doi.org/10.5281/zenodo.21689198}
+}
+```
 
 
 
