@@ -4,8 +4,8 @@ title: "Laboratory Automation Digital Twin Framework"
 authors:
   - family-names: "Ajayi"
     given-names: "Oluwaseun O."
-version: 0.1.0
-date-released: 2026-07-27
+version: "1.0.1"
+date-released: 2026-07-29
 license: MIT
 repository-code: "https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin"
 keywords:
