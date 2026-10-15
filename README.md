@@ -25,9 +25,15 @@ This project builds on general laboratory automation concepts such as:
 - workflow execution
 - event logging
 - traceability and audit records
-- throughput and utilization analysis
+- throughput and utilization analysis (planned; see Current status)
 
 The framework is intended for non-proprietary, educational, and research-oriented laboratory automation modeling.
+
+---
+
+## Current status
+
+Version 1.0 is an early prototype. It represents samples, devices and ordered workflows, moves each sample through its workflow, and records a time-stamped audit log and transport counts. It does not yet simulate time, device queues or capacity, so it cannot yet report durations, utilization or bottlenecks. Those features are planned for the next release, together with merging the [Automation Readiness Assessment Framework](https://github.com/Oluwaseun-O-Ajayi/automation-readiness-framework) into this package.
 
 ---
 
@@ -38,7 +44,7 @@ The framework is intended for non-proprietary, educational, and research-oriente
 - Simulates sample movement between devices
 - Tracks workflow execution step-by-step
 - Records traceability events and audit logs
-- Computes workflow-level metrics such as transfer counts, device utilization, completion time, and bottlenecks
+- Counts transport events and completed samples
 - Provides example workflows for automated laboratory material flow
 
 ---
@@ -89,7 +95,7 @@ Devices represent laboratory workcell components such as:
 - plate readers
 - transport robots
 
-Each device can have a state, capacity, queue, and processing duration.
+Each device records a name, capacity and processing time and counts the samples it processes. In the current version the engine does not yet route samples through device queues or advance a simulation clock, so capacity and processing time do not affect results.
 
 ### Workflows
 
@@ -107,14 +113,13 @@ The digital twin engine coordinates:
 
 ### Metrics
 
-The framework can compute:
+The current version reports:
 
-- total workflow duration
 - number of transport events
-- device utilization
-- queue time
-- bottleneck device
-- traceability completeness
+- number of completed samples
+- a time-stamped audit log and a per-sample history
+
+Total workflow duration, device utilization, queue time and bottleneck identification require a simulation clock and queueing, which are planned (see Current status).
 
 ---
 
