@@ -80,6 +80,10 @@ Zenodo.
 
 DOI: 10.5281/zenodo.21689198
 
+# AI usage disclosure
+
+The author designed and wrote the original version of this software in July 2026, and wrote this paper. In October 2026, Claude Opus 5.5 (Anthropic) was used for code review and documentation edits. The author directed and verified all changes and takes full responsibility for the work.
+
 # Acknowledgements
 
 This framework was motivated by general laboratory automation concepts, including workcell coordination, sample traceability, workflow execution, and audit logging.
