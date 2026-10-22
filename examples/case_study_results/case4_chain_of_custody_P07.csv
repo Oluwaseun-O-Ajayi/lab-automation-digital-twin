@@ -1,0 +1,23 @@
+time,event,device
+22.88,registered,
+22.88,arrived,Storage
+22.88,started,Storage
+23.38,finished,Storage
+23.38,transport,Storage
+23.46,arrived,Liquid handler
+23.46,queued,Liquid handler
+36.46,started,Liquid handler
+44.71,finished,Liquid handler
+44.71,transport,Liquid handler
+45.53,arrived,Incubator
+45.53,started,Incubator
+102.27,finished,Incubator
+102.27,transport,Incubator
+111.04,arrived,Plate reader
+111.04,started,Plate reader
+114.57,finished,Plate reader
+114.57,transport,Plate reader
+117.69,arrived,Storage
+117.69,started,Storage
+118.19,finished,Storage
+118.19,completed,

@@ -1,36 +1,11 @@
-from src.sample import Sample
-from src.device import Device
-from src.workflow import Workflow
-from src.digital_twin import DigitalTwinEngine
+"""One plate through the screening workflow, with its full audit trail."""
 
+from _common import screening_devices, screening_workflow
+from lab_digital_twin import Simulation
 
-sample = Sample(
-    sample_id="SAMPLE_001",
-    metadata={"type": "cell_culture"},
-)
+sim = Simulation(screening_devices(), transport_time=1.5)
+sim.add_sample("PLATE_001", screening_workflow())
+result = sim.run()
 
-workflow = Workflow(
-    name="Cell Screening",
-    steps=[
-        "Storage",
-        "LiquidHandler",
-        "Incubator",
-        "PlateReader",
-        "Storage",
-    ],
-)
-
-engine = DigitalTwinEngine()
-
-engine.add_sample(sample)
-
-engine.add_device(Device("Storage"))
-engine.add_device(Device("LiquidHandler"))
-engine.add_device(Device("Incubator"))
-engine.add_device(Device("PlateReader"))
-
-engine.run_workflow(sample.sample_id, workflow)
-
-engine.print_audit_log()
-
-engine.print_metrics()
+print(result.audit_log[["time", "event", "device"]].to_string(index=False))
+print("\nTurnaround:", result.samples.loc[0, "turnaround"], "min")

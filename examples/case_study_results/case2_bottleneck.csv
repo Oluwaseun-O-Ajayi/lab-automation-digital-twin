@@ -1,0 +1,5 @@
+device,capacity,utilization,mean_wait,max_queue_length,max_plates_per_hour
+Storage,10,0.012,1.078,86,600.0
+Liquid handler,1,0.739,282.844,95,10.0
+Incubator,8,0.924,66.0,18,8.0
+Plate reader,1,0.493,0.0,0,15.0

@@ -41,6 +41,8 @@ The framework provides software components for:
 - recording audit logs for traceability;
 - calculating basic workflow metrics such as completion time, transfer counts, queue delays, device utilization, and bottleneck behavior.
 
+The simulation engine has been validated against results with known answers: it reproduces the exact makespan of deterministic flow lines and matches queueing theory for a single server with random arrivals and service (M/M/1) to within 4% for utilization and waiting time. Four reproducible case studies, covering this validation, bottleneck identification, what-if analysis of equipment changes and chain-of-custody checks, are provided in the repository (`examples/CASE_STUDIES.md`).
+
 # Example Workflow
 
 A representative automated screening workflow may include sample retrieval from storage, processing by a liquid handler, incubation, plate reading, and return to storage. During execution, the digital twin records each sample movement, device state change, and workflow event. The resulting audit log provides a complete computational trace of the simulated workflow.
@@ -62,8 +64,10 @@ The Laboratory Automation Digital Twin Framework is available as open-source sof
 Repository:
 https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin
 
+The companion Automation Readiness Assessment Framework (https://github.com/Oluwaseun-O-Ajayi/automation-readiness-framework) assesses whether a workflow is ready to automate before it is modeled with this framework.
+
 Current Version:
-v1.0.1
+v2.0.0
 
 DOI:
 10.5281/zenodo.21689198
@@ -74,7 +78,7 @@ If you use this framework, please cite:
 
 Ajayi, O. O. (2026).
 
-Laboratory Automation Digital Twin Framework (Version 1.0.1) [Computer software].
+Laboratory Automation Digital Twin Framework (Version 2.0.0) [Computer software].
 
 Zenodo.
 
@@ -82,7 +86,7 @@ DOI: 10.5281/zenodo.21689198
 
 # AI usage disclosure
 
-The author designed and wrote the original version of this software in July 2026, and wrote this paper. In October 2026, Claude Opus 5.5 (Anthropic) was used for code review and documentation edits. The author directed and verified all changes and takes full responsibility for the work.
+The author designed and developed version 1 of the software in July 2026 and authored the accompanying manuscript. In October 2026, the author developed version 2 of the software. Claude Opus 5.5 (Anthropic) was used to assist with code review, refactoring, and testing. The author directed and verified all modifications and accepts full responsibility for the software and the manuscript.
 
 # Acknowledgements
 

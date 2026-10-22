@@ -1,53 +1,40 @@
 # Laboratory Automation Digital Twin Framework
 
-**A modular Python framework for modeling material transport, device coordination, workflow execution, and sample traceability in automated laboratory workflows.**
+**A discrete-event digital twin of automated laboratory workflows: device capacity, queues, processing and transport times, sample traceability, throughput and bottlenecks.**
+
+[![tests](https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin/actions/workflows/tests.yml/badge.svg)](https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin/actions/workflows/tests.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21689198.svg)](https://doi.org/10.5281/zenodo.21689198)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
+
 ## DOI and Archival Record
 
 This software is archived on Zenodo to support long-term preservation, reproducibility, and scholarly citation.
 
-**Current Version:** 1.0.1
+**Current Version:** 2.0.0
 
 **DOI:** https://doi.org/10.5281/zenodo.21689198
 
-## Overview
-
-Laboratory Automation Digital Twin Framework is an open-source software framework for simulating and analyzing automated laboratory workflows.
-
-The framework models laboratory devices, samples, transport events, workflow steps, and audit trails within a single digital representation of a laboratory automation system. It is designed to support research, education, and early-stage design of automated laboratory workflows.
-
-This project builds on general laboratory automation concepts such as:
-
-- device state tracking
-- sample lifecycle management
-- material transport between workcell stations
-- workflow execution
-- event logging
-- traceability and audit records
-- throughput and utilization analysis (planned; see Current status)
-
-The framework is intended for non-proprietary, educational, and research-oriented laboratory automation modeling.
-
 ---
 
-## Current status
+## Overview
 
-Version 1.0 is an early prototype. It represents samples, devices and ordered workflows, moves each sample through its workflow, and records a time-stamped audit log and transport counts. It does not yet simulate time, device queues or capacity, so it cannot yet report durations, utilization or bottlenecks. Those features are planned for the next release, together with merging the [Automation Readiness Assessment Framework](https://github.com/Oluwaseun-O-Ajayi/automation-readiness-framework) into this package.
+The framework models an automated laboratory workcell as a set of devices, each with a number of parallel slots and a processing time, and moves samples through ordered workflows. A simulation clock advances from event to event: samples arrive, wait in first-in, first-out queues when a device is full, are processed, and are transported to the next step. Every event is recorded with its simulated time, so each sample has a complete chain of custody, and the run reports throughput, turnaround, waiting time, device utilization and the bottleneck.
+
+It is intended for education, early-stage design of automated workflows, and what-if analysis before equipment or schedules are changed.
 
 ---
 
 ## What This Framework Does
 
-- Models laboratory samples and their lifecycle states
-- Represents automated devices such as storage units, liquid handlers, incubators, plate readers, and transport robots
-- Simulates sample movement between devices
-- Tracks workflow execution step-by-step
-- Records traceability events and audit logs
-- Counts transport events and completed samples
-- Provides example workflows for automated laboratory material flow
-
----
+- Models devices with capacity (parallel slots) and fixed or random processing times
+- Moves samples through ordered workflows, including repeat visits to the same device
+- Simulates transport time between steps (fixed or random)
+- Schedules samples at fixed or random arrival intervals
+- Records a time-stamped audit log and verifies each sample's chain of custody
+- Reports makespan, throughput, mean and 95th-percentile turnaround, waiting time, utilization, queue lengths and the bottleneck
+- Calculates the capacity limit of each device, so simulated throughput can be compared with theory
 
 ## What This Framework Does Not Do
 
@@ -55,188 +42,119 @@ Version 1.0 is an early prototype. It represents samples, devices and ordered wo
 - It does not connect to proprietary automation systems
 - It does not include confidential industrial workflows
 - It does not replace validated LIMS, MES, or instrument control software
-- It does not simulate physical robot kinematics or collision detection at industrial fidelity
+- It does not model robot kinematics, collisions, finite buffers, device failures or shift schedules
 
 ---
-
-## Intended Use
-
-This framework is intended for:
-
-- laboratory automation education
-- early-stage automated workflow design
-- digital twin concept demonstration
-- sample traceability modeling
-- workcell coordination studies
-- reproducible simulation of automated laboratory processes
-
----
-
-## Core Concepts
-
-### Samples
-
-Samples are represented as trackable entities with:
-
-- unique identifiers
-- metadata
-- current location
-- lifecycle status
-- event history
-
-### Devices
-
-Devices represent laboratory workcell components such as:
-
-- storage units
-- liquid handlers
-- incubators
-- centrifuges
-- plate readers
-- transport robots
-
-Each device records a name, capacity and processing time and counts the samples it processes. In the current version the engine does not yet route samples through device queues or advance a simulation clock, so capacity and processing time do not affect results.
-
-### Workflows
-
-Workflows define ordered or semi-ordered steps that move samples through devices and processing stages.
-
-### Digital Twin Engine
-
-The digital twin engine coordinates:
-
-- sample movement
-- device state updates
-- workflow execution
-- event logging
-- metric collection
-
-### Metrics
-
-The current version reports:
-
-- number of transport events
-- number of completed samples
-- a time-stamped audit log and a per-sample history
-
-Total workflow duration, device utilization, queue time and bottleneck identification require a simulation clock and queueing, which are planned (see Current status).
-
----
-
-## Example Use Case
-
-A cell culture screening workflow can be modeled as:
-
-```text
-Storage
-  ↓
-Liquid Handler
-  ↓
-Incubator
-  ↓
-Plate Reader
-  ↓
-Storage
-```
-## Project Structure
-
-lab-automation-digital-twin/
-├── README.md
-├── paper.md
-├── paper.bib
-├── CITATION.cff
-├── CHANGELOG.md
-├── pyproject.toml
-├── src/
-│   ├── sample.py
-│   ├── device.py
-│   ├── workflow.py
-│   ├── digital_twin.py
-│   └── metrics.py
-├── examples/
-│   ├── sample_workflow.py
-│   └── throughput_demo.py
-├── docs/
-└── figures/
 
 ## Installation
 
 ```bash
 git clone https://github.com/Oluwaseun-O-Ajayi/lab-automation-digital-twin.git
 cd lab-automation-digital-twin
-pip install -e .
+pip install .            # or: pip install ".[test]" to include the test dependencies
 ```
+
+Requires Python 3.9 or later, NumPy and pandas.
 
 ## Quick Start
 
 ```python
-from src.sample import Sample
-from src.device import Device
-from src.workflow import Workflow
-from src.digital_twin import DigitalTwinEngine
+from lab_digital_twin import Device, Workflow, Simulation, capacity_limit
 
-sample = Sample(
-    sample_id="SAMPLE_001",
-    metadata={"type": "cell_culture"}
-)
+devices = [
+    Device("Storage", capacity=10, process_time=0.5),
+    Device("Liquid handler", capacity=1, process_time=6.0),
+    Device("Incubator", capacity=8, process_time=60.0),
+    Device("Plate reader", capacity=1, process_time=("uniform", 3.0, 5.0)),
+]
+workflow = Workflow("Plate screening",
+                    ["Storage", "Liquid handler", "Incubator", "Plate reader", "Storage"])
 
-storage = Device("Storage", capacity=10)
-liquid_handler = Device(
-    "LiquidHandler",
-    capacity=1,
-    process_time=5
-)
+sim = Simulation(devices, transport_time=1.5, seed=1)
+sim.add_samples(workflow, n=48, interarrival=5.0)
+result = sim.run()
 
-plate_reader = Device(
-    "PlateReader",
-    capacity=1,
-    process_time=3
-)
-
-workflow = Workflow(
-    name="Example Screening Workflow",
-    steps=[
-        "Storage",
-        "LiquidHandler",
-        "PlateReader",
-        "Storage"
-    ]
-)
-
-engine = DigitalTwinEngine()
-
-engine.add_sample(sample)
-engine.add_device(storage)
-engine.add_device(liquid_handler)
-engine.add_device(plate_reader)
-
-engine.run_workflow(
-    sample.sample_id,
-    workflow
-)
-
-engine.print_audit_log()
-engine.print_metrics()
+print(result.metrics())                  # throughput, turnaround, waiting, bottleneck
+print(result.devices)                    # utilization and queues per device
+print(result.verify_traceability())      # chain-of-custody check for every sample
+print(capacity_limit(devices, workflow)) # maximum samples per minute each device allows
 ```
 
-## Publication Framing
-This repository is designed as a research software framework for modeling laboratory automation workflows.
+Durations can be a number, `("exponential", mean)`, `("normal", mean, sd)` (truncated at zero), `("uniform", low, high)`, or a function that takes a NumPy random generator. Time units are the user's choice; the examples use minutes.
 
-The intended manuscript framing is:
+More examples:
 
-Laboratory Automation Digital Twin Framework: Modeling Material Transport, Device Coordination, and Sample Traceability in Automated Laboratory Workflows
+```bash
+python examples/sample_workflow.py     # one plate and its audit trail
+python examples/throughput_demo.py     # 48 plates: throughput and bottleneck
+```
 
-## Scientific Contribution
+---
 
-The Laboratory Automation Digital Twin Framework provides a modular and extensible software environment for modeling automated laboratory workflows through digital twin concepts.
+## Case Studies
 
-The framework integrates sample traceability, device-state management, workflow execution, material transport simulation, event logging, and workflow performance metrics into a single reproducible platform. By combining these capabilities, the framework supports educational activities, workflow analysis, automation planning, and research in laboratory digital transformation.
+Four reproducible case studies are described in [`examples/CASE_STUDIES.md`](examples/CASE_STUDIES.md):
 
-Rather than controlling physical automation systems, the framework focuses on providing a transparent computational representation of laboratory operations that can be used to explore workflow behavior, evaluate system design concepts, and investigate traceability and throughput characteristics.
+1. **Validation.** The engine reproduces the exact makespan of deterministic flow lines and matches queueing theory (M/M/1) for utilization and waiting time to within 4%.
+2. **Bottleneck.** In an illustrative screening workcell, the simulation and the capacity calculation both identify the incubator as the limit, and the run reaches 92% of its theoretical throughput.
+3. **What-if.** Of three equipment changes, only one combination removes all waiting; a second liquid handler alone saves 7 of 419 minutes.
+4. **Traceability.** With variable times, all 48 plates have a complete, ordered chain of custody, and a deleted record is detected.
+
+---
+
+## Core Concepts
+
+**Device.** A workcell station with a name, a number of slots and a processing time. A sample that arrives when all slots are busy waits in a first-in, first-out queue of unlimited length.
+
+**Workflow.** An ordered list of device names. A sample visits each in turn; a device may appear more than once (for example, storage at the start and end).
+
+**Simulation.** Holds the devices, the transport time and a random seed. Samples are added with their workflow and arrival time, and `run()` returns a result.
+
+**Result.** `audit_log` (every event with its time), `samples` (arrival, completion, turnaround, waiting, processing and transport time per sample), `devices` (utilization, samples processed, mean wait, maximum queue), `metrics()`, `bottleneck` and `verify_traceability()`.
+
+---
+
+## Testing
+
+```bash
+pip install ".[test]"
+python -m pytest
+```
+
+The tests check exact makespans of deterministic flow lines, first-in, first-out ordering, parallel slots, M/M/1 utilization and waiting time against theory, throughput against the capacity limit, repeat visits, traceability (including detection of a deleted record), reproducibility with a seed, input validation, and that every example runs. They run on Linux, macOS and Windows for every push.
+
+---
+
+## Project Structure
+
+```text
+lab-automation-digital-twin/
+├── lab_digital_twin/
+│   ├── components.py      Device, Workflow, durations
+│   └── simulation.py      event-driven engine, results, capacity limits
+├── examples/
+│   ├── sample_workflow.py
+│   ├── throughput_demo.py
+│   ├── case_study_1_validation.py ... case_study_4_traceability.py
+│   ├── CASE_STUDIES.md
+│   └── case_study_results/
+├── tests/
+├── paper.md, paper.bib
+├── CITATION.cff, CHANGELOG.md
+└── pyproject.toml
+```
+
+---
+
+## Related Software
+
+The [Automation Readiness Assessment Framework](https://github.com/Oluwaseun-O-Ajayi/automation-readiness-framework) scores whether a workflow is ready to automate. This framework then simulates how the automated workflow would perform.
+
+---
 
 ## Limitations
 
-This is a conceptual and computational framework. It does not interface with real robots, instruments, LIMS systems, or manufacturing execution systems. It is intended for simulation, education, and research workflow modeling.
+This is a computational model for simulation, education and workflow design. Queues are unlimited, devices do not fail, and there are no shift patterns, so results describe an idealized workcell. Validate any conclusion against real operating data before using it for operational decisions.
 
 ## License
 
@@ -247,14 +165,7 @@ MIT License
 If you use this software in research, education, workflow modeling, or laboratory automation studies, please cite:
 
 ```text
-Ajayi, O. O. (2026).
-
-Laboratory Automation Digital Twin Framework
-(Version 1.0.1) [Computer software].
-
-Zenodo.
-
-DOI: 10.5281/zenodo.21689198
+Ajayi, O. O. (2026). Laboratory Automation Digital Twin Framework (Version 2.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.21689198
 ```
 
 ### BibTeX
@@ -264,18 +175,9 @@ DOI: 10.5281/zenodo.21689198
   author = {Ajayi, Oluwaseun O.},
   title = {Laboratory Automation Digital Twin Framework},
   year = {2026},
-  version = {1.0.1},
+  version = {2.0.0},
   publisher = {Zenodo},
   doi = {10.5281/zenodo.21689198},
   url = {https://doi.org/10.5281/zenodo.21689198}
 }
 ```
-
-
-
-
-
-
-
-
-

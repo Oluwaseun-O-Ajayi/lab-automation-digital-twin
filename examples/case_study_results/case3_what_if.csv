@@ -1,0 +1,5 @@
+scenario,makespan_min,mean_turnaround_min,p95_turnaround_min,mean_wait_min,bottleneck,bottleneck_utilization
+"Baseline (8 incubator slots, 1 liquid handler)",419.0,130.5,181.65,53.5,Incubator,0.86
+12 incubator slots,359.0,100.5,121.65,23.5,Liquid handler,0.8
+2 liquid handlers,412.0,127.0,177.0,50.0,Incubator,0.87
+12 incubator slots and 2 liquid handlers,312.0,77.0,77.0,0.0,Incubator,0.77
